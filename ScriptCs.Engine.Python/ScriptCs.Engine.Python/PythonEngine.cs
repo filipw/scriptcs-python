@@ -84,7 +84,7 @@ namespace ScriptCs.Engine.PythonCs
 
             foreach (var @namespace in allNamespaces)
             {
-                code = "import " + @namespace + Environment.NewLine + code;
+                code = "from " + @namespace + " import *" + Environment.NewLine + code;
             }
 
             dynamic scope = python.CreateScope();

@@ -7,7 +7,7 @@ namespace ScriptCs.Engine.PythonCs
     {
         public void Initialize(IModuleConfiguration config)
         {
-            config.ScriptEngine<PythonEngine>();
+            config.ScriptEngine<PythonEngine>().LineProcessor<PythonNamespaceLineProcessor>();
         }
     }
 }

@@ -76,6 +76,7 @@
     <Compile Include="PythonEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PythonModule.cs" />
+    <Compile Include="PythonNamespaceLineProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
