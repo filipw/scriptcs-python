@@ -42,9 +42,13 @@ namespace ScriptCs.Engine.PythonCs
             executionReferences.Union(scriptPackSession.References);
 
             var allNamespaces = namespaces.Union(scriptPackSession.Namespaces).Distinct();
-            var host = _scriptHostFactory.CreateScriptHost(new ScriptPackManager(scriptPackSession.Contexts), scriptArgs);
+            var host = _scriptHostFactory.CreateScriptHost(new ScriptPackManager(scriptPackSession.Contexts), scriptArgs) as ScriptHost;
 
-            var python = Python.CreateEngine();
+            var runtimeSetup = new ScriptRuntimeSetup();
+            runtimeSetup.LanguageSetups.Add(Python.CreateLanguageSetup(null));
+
+            var runtime = new ScriptRuntime(runtimeSetup);
+            var python = Python.GetEngine(runtime);
             python.Runtime.LoadAssembly(typeof(IScriptHost).Assembly);
             python.Runtime.LoadAssembly(typeof(object).Assembly);
             python.Runtime.LoadAssembly(typeof(ExpandoObject).Assembly);
@@ -87,8 +91,9 @@ namespace ScriptCs.Engine.PythonCs
                 code = "from " + @namespace + " import *" + Environment.NewLine + code;
             }
 
-            dynamic scope = python.CreateScope();
-
+            var scope = python.CreateScope();
+            scope.SetVariable("scriptcs", host);
+                
             try
             {
                 var result = python.Execute(code, scope);
